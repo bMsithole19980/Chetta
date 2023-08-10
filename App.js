@@ -12,7 +12,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <LoginScreen/>
+      <HomeScreen/>
       <StatusBar style="auto" />
     </View>
   );

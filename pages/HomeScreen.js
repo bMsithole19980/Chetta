@@ -1,90 +1,48 @@
-import React, { useState, useEffect } from 'react'
-import { View, TextInput, Text, Pressable} from 'react-native'
+import React from 'react'
+import {useState} from 'react'
+import { View, Text, StyleSheet,Modal, Dimensions, ScrollView, Pressable } from 'react-native'
+import ChatListItem from '../components/ChatListItem'
+import HomeSearchComponent from '../components/HomeSearchComponent'
+import ChatInputComponent from '../components/ChatInputComponent'
+import ChatRequest from '../components/ChatRequest'
+import FAB from '../components/FAB'
+import ChatComponent from '../components/ChatComponent'
 
-
-export default function HomeScreen() {
-    const [name, setName] = useState('');
-    const [age, setAge] = useState(0);
-    const [books, setBooks] = useState(['Black root Science', 'The secret']);
- 
-    
-    const addBook=(title)=>{
-        setBooks(books=>{
-            return[...books, title.trim()]
-        })
-
-    }
-    const clearState=()=>{
-        setName(''),
-        setAge(0),
-        setBooks(['Black root Science', 'The secret'])
-    }
-
-    const removeBook=(index)=>{
-        if (books[index]) {
-            const newBooks =[...books];
-            newBooks.splice(index, 1)
-            setBooks(newBooks)
-            
-        }
-    }
-    useEffect(()=>{
-        console.log(name);
-    },[name])
-    useEffect(()=>{
-        console.log(age);
-    },[age])
-    useEffect(()=>{
-        console.log(books);
-    },[books])
-
-    useEffect(()=>{
-        
-    },[name ,books, age])
-    
-
-
-
-
+export default function () {
+    const [isModalVisible, setIsModalVisible]= useState(false)
     return (
 
-        
-        <View>
-            {
-                books.map((item,index)=>{
-                    return(<Text key={index}>{item}</Text>)
-                })
-            }
-            
-            <TextInput
-                style={{ borderBlockColor: 'grey', borderWidth: 1, borderRadius: 5 }}
-                onChange={(event) => setName(event.target.value)} 
-                placeholder='Name'
-                /><br></br>
-            <TextInput
-                style={{ borderBlockColor: 'grey', borderWidth: 1, borderRadius: 5 }}
-                onChange={(event) => setAge(event.target.value)}
-                placeholder='Age'
-
-            /><br></br>
-            <TextInput
-                style={{ borderBlockColor: 'grey', borderWidth: 1, borderRadius: 5 }}
-                onBlur={(event)=>setBooks(event.target.value)} // it will get triggered the moment you move away from that specific input 
-                placeholder='Book'
-            /><br></br>
-            <TextInput
-                style={{ borderBlockColor: 'grey', borderWidth: 1, borderRadius: 5 }}
-                onBlur={(event)=>removeBook(event.target.value)} // it will get triggered the moment you move away from that specific input 
+        <View style={styles.container}>
+             {/*
+              <ScrollView
+                scrollEnabled={true}
+            >
+                <ChatListItem />
+                <ChatInputComponent />
+                <Modal 
+                transparent={true}
+                visible={isModalVisible}>
+                    <ChatRequest onPress={()=>setIsModalVisible(false)} />
+                </Modal>
                 
-            /><br></br>
-            <Pressable
-              style={{backgroundColor:'rbg(150, 180, 190)' ,
-              borderRadius: 10,
-               color:'#fff'}}
-               onPress={()=>{clearState()}}
-               title='Clear'
-            >Clear</Pressable>
+
+            </ScrollView>
+            <Pressable onPress={()=>setIsModalVisible(true)}>
+                    <FAB/>
+                </Pressable>
+             */}
+             <ChatComponent/>
+           
 
         </View>
     )
 }
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#26394D',
+        flex: 1,
+        width: Dimensions.get('window').width
+
+    }
+
+})

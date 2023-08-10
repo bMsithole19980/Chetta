@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Text, Button, Pressable, TextInput } from 'react-native'
-import { TouchableOpacity } from 'react-native-web'
+
 
 export default function RegisterScreen() {
   return (

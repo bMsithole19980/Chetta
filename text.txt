@@ -1,0 +1,15 @@
+{
+text : 'Hi there' , userID: userID
+},
+{
+text : 'Hello Buddy , How  are you?' , userID: 'asdfg321654
+},
+{
+text : 'Good and yourself?, why were you absent today?' , userID: userID
+},
+{
+text : 'Ke Xap , i was sick today' , userID: asdfg321654
+}
+{
+text : 'Hi there' , userID: userID
+}
