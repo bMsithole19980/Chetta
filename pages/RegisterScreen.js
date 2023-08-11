@@ -1,10 +1,12 @@
 import React from 'react'
-import { View, StyleSheet, Text, Button, Pressable, TextInput } from 'react-native'
+import { View, StyleSheet, Text ,TextInput ,Pressable } from 'react-native'
 
 
-export default function RegisterScreen() {
+export default function RegisterScreen({navigation}) {
+  
   return (
-    <View style={registerStyles.container}>
+    <View>
+      <View style={registerStyles.container}>
       <View style={registerStyles.topContainer}>
         <Text style={registerStyles.appName}>Chatta</Text>
       </View>
@@ -22,7 +24,7 @@ export default function RegisterScreen() {
             </Pressable>
             <View style={registerStyles.registeredSection}>
               <Text style={registerStyles.registeredText}>Registered?</Text>
-              <Text style={registerStyles.signInText}>Sign In</Text>
+              <Text style={registerStyles.signInText} onPress={()=> navigation.navigate('Login')}>Sign In</Text>
 
             </View>
           </View>
@@ -31,9 +33,11 @@ export default function RegisterScreen() {
 
       </View>
     </View>
+    </View>
 
   )
 }
+
 
 const registerStyles = StyleSheet.create({
   container: {
@@ -118,3 +122,4 @@ const registerStyles = StyleSheet.create({
   }
 
 })
+

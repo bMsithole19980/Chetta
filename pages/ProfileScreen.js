@@ -1,14 +1,14 @@
 import React from 'react'
 import { View, StyleSheet,Text, Image, Pressable ,TextInput } from 'react-native'
 import CameraIcon from '../assets/camera-solid.svg'
-
+import profilePicture from '/bongza.jpg'
 
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <View style={styles.imageBox}>
-          <Image style={styles.imgContainer} source={{ uri: 'https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcR38_lpGYw0sgNq-GRsx-9SYogr2Qjb9ldU6SpxHN_7kQ4xrfqdgQLHPS03JwpDzcAKeZWd7erwGZIddPg' }} />
+          <Image style={styles.imgContainer} source={{ uri: profilePicture }} />
           <View style={styles.camContainer}>
             <Image style={styles.camIcon} source={{ uri: CameraIcon }} />
           </View>

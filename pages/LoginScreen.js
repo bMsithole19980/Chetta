@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { View, StyleSheet, Text, TextInput, Pressable ,Alert } from 'react-native'
 import * as yup from 'yup'
 
-export default function LoginScreen() {
+export default function LoginScreen(props) {
      const [email, setEmail]=useState('');
      const [password, setPassword]= useState('');
 
@@ -52,11 +52,11 @@ export default function LoginScreen() {
                         <Pressable
                         onPress={()=>handleSubmit()} 
                         style={loginStyle.actionButton}>
-                            <Text style={loginStyle.Login}>Sign In</Text>
+                            <Text style={loginStyle.Login} >Sign In</Text>
                         </Pressable>
                         <View style={loginStyle.registerSection}>
                             <Text style={loginStyle.registerText}>No account?</Text>
-                            <Text style={loginStyle.SignUpText}>Sign Up</Text>
+                            <Text style={loginStyle.SignUpText} onPress={()=>props.navigation.navigate('Register')} >Sign Up</Text>
 
                         </View>
                         <View style={loginStyle.passwordForg}>
