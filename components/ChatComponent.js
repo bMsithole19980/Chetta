@@ -88,7 +88,9 @@ export default function ChatComponent() {
 
 const styles = StyleSheet.create({
   container:{
-    padding: 10
+    flex: 1,
+    padding: 10,
+    overflow: 'hidden'
   },
   contentHolder:{
     width: 280,

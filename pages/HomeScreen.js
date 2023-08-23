@@ -8,30 +8,31 @@ import ChatRequest from '../components/ChatRequest'
 import FAB from '../components/FAB'
 import ChatComponent from '../components/ChatComponent'
 
-export default function () {
+export default function ({navigation}) {
     const [isModalVisible, setIsModalVisible]= useState(false)
     return (
 
         <View style={styles.container}>
-             {/*
+            <Modal
+                transparent={true}
+                visible={isModalVisible}>
+                <ChatRequest onPress={() => setIsModalVisible(false)} />
+            </Modal>
+             
               <ScrollView
                 scrollEnabled={true}
             >
-                <ChatListItem />
-                <ChatInputComponent />
-                <Modal 
-                transparent={true}
-                visible={isModalVisible}>
-                    <ChatRequest onPress={()=>setIsModalVisible(false)} />
-                </Modal>
+                <ChatListItem navigation={navigation} />
+                <ChatListItem navigation={navigation}/>
+                <ChatListItem  navigation={navigation}/>
                 
 
             </ScrollView>
             <Pressable onPress={()=>setIsModalVisible(true)}>
                     <FAB/>
                 </Pressable>
-             */}
-             <ChatComponent/>
+             
+             {/* <ChatComponent/> */}
            
 
         </View>

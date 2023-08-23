@@ -1,21 +1,131 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
-import {  EvilIcons, Feather, FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
-const ChatInputComponent = () => {
+import { Pressable, StyleSheet, TextInput, View, Text, Keyboard } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { Modal } from 'react-native';
+import CameraComponent from './CameraComponent';
+import { Camera } from 'expo-camera';
+
+const ChatInputComponent = ({
+  showEmoGifBoard, isBoardVisible, messageText, setMessageText, sendMessage, recordAudio, showMediaPicker, recording
+}) => {
+
+  const inputRef = useRef();
+  const [isCamVisible, setIsCamVisisble] = useState(false);
+  const [hours, setHours] = useState();
+  const [minutes, setMinutes] = useState(0);
+  const { seconds, setSeconds } = useState(5);
+  const [isPaused, setIsPaused] = useState(true);
+
+  const checkCameraPermission = async () => {
+    try {
+      let status
+      status = ((await Camera.getCameraPermissionsAsync())).status
+      if (status !== 'granted') {
+        status = (await Camera.requestCameraPermissionsAsync()).status
+      }
+      if (status == 'granted') {
+        setIsCamVisisble(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+
+
   return (
     <View style={styles.container}>
-      <View style={styles.leftView}>
-        <MaterialIcons name='emoji-emotions'  size={24} style={styles.emoji}/>
-        <TextInput 
-        style={styles.textInput}
-        placeholder='Type a message'></TextInput>
-        <MaterialIcons name='camera-alt' size={24} style={styles.camera}/>
-        <FontAwesome name='paperclip'  size={22} color={'#272727'} style={styles.clip}/>
-       
+      <Modal
+        animationType='slide'
+        visible={isCamVisible}
+      >
+        <CameraComponent closeCam={() => setIsCamVisisble(false)} />
 
-      </View>
+      </Modal>
+
+      <View style={styles.leftView}>
+        {
+          !recording ? (
+            <>
+              {
+                isBoardVisible ? (
+                  <Pressable onPress={() => { showEmoGifBoard(false); inputRef.current.focus() }}>
+                    <MaterialIcons name='keyboard' size={24} style={styles.emoji} />
+                  </Pressable>
+
+                ) : (
+                  <Pressable onPress={() => { showEmoGifBoard(true); Keyboard.dismiss() }}>
+                    <MaterialIcons name='emoji-emotions' size={24} style={styles.emoji} />
+                  </Pressable>
+                )
+              }
+
+
+
+              <TextInput
+                ref={inputRef}
+                style={styles.textInput}
+                placeholder='Type a message'
+                onChangeText={(text) => setMessageText(text)}
+                value={messageText}
+              />
+              <Pressable onPress={() => checkCameraPermission()}>
+                <MaterialIcons name='camera-alt' size={24} style={styles.camera} />
+              </Pressable>
+              <Pressable onPress={() => showMediaPicker()}>
+                <FontAwesome name='paperclip' size={22} color={'#272727'} style={styles.clip} />
+              </Pressable>
+            </>
+
+          ) : (
+            <View style={styles.recordingCont}>
+              {
+                isPaused ? (
+                    <Pressable>
+                      <MaterialIcons name="fiber-manual-record" size={32 } color="rgb(200, 80, 80)" style={[styles.pauseIcon, {top: -3 }]} />
+                    </Pressable>
+                  ) : (
+                    <Pressable>
+                      <Ionicons name='pause' size={24} color={'black'} style={styles.pauseIcon} />
+                    </Pressable>
+                )
+              }
+              
+              <Text style={styles.text}>{ isPaused ? "Paused" :" Recording......"}</Text>
+              <View style={styles.recordingTime}>
+                {hours && <Text style={styles.text}>{hours + ':'}</Text>}
+                <Text style={styles.text}>{minutes + ':'}</Text>
+                <Text style={styles.text}>{seconds}</Text>
+              </View>
+              <Ionicons name="stop" size={24} color="rgb(200, 80, 80)"   style={styles.stopIcon}/>
+              <Pressable>
+                <MaterialIcons name="delete" size={24} color="rgb(200, 80, 80)" style={styles.deleteIcon} />
+              </Pressable>
+
+            </View>
+
+          )
+        }
+
+
+      </View
+      >
       <View style={styles.micConatiner}>
-      <FontAwesome name='microphone'  size={24} />
+        {
+          recording || messageText ? (
+            <Pressable onPress={() => sendMessage()}>
+              <MaterialIcons name='send' size={24} color={'black'} style={styles.mic} />
+            </Pressable>
+
+          ) : (
+            <Pressable onPress={() => recordAudio()}>
+              <FontAwesome name='microphone' size={24} style={styles.mic} />
+            </Pressable>
+
+          )
+        }
+
+
       </View>
     </View>
   )
@@ -24,15 +134,16 @@ const ChatInputComponent = () => {
 export default ChatInputComponent
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     padding: 10,
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    width: '100%'
   },
-  leftView:{
+  leftView: {
     flex: 1,
     height: 42,
-    flex:1,
+    flex: 1,
     borderRadius: 21,
     backgroundColor: '#FFF',
     flexDirection: 'row',
@@ -41,38 +152,64 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
 
   },
-  emoji:{
-     color: '#272727',
-     marginRight: 10
-
+  emoji: {
+    color: '#272727',
+    marginRight: 10
   },
-  textInput:{
+  textInput: {
     fontSize: 15,
     color: '#4F4F4F',
     flex: 1
-
   },
-  camera:{
+  camera: {
     height: 21,
     width: 21,
-    marginHorizontal: 10
-
+    marginLeft: 10,
+    marginRight: 20
   },
-  clip:{
+  clip: {
     height: 21,
     width: 21,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  micConatiner:{
+  micConatiner: {
     height: 42,
     width: 42,
     borderRadius: 21,
     backgroundColor: '#FFF',
-    marginLeft: 10, 
+    marginLeft: 10,
     justifyContent: 'center',
-    alignItems: 'center',
-       
+    alignItems: 'center'
   },
- 
+  mic: {
+    color: '#272727'
+  },
+  recordingCont: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  pauseIcon: {
+    marginRight: 10,
+    marginLeft: 5
+  },
+  recordingTime: {
+    flexDirection: 'row',
+    marginLeft: 'auto',
+    marginRight: 5,
+  },
+  text: {
+    color: '#4F4F4F',
+  },
+  deleteIcon: {
+    marginLeft: 5,
+    marginRight: 5
+  },
+  stopIcon:{
+    marginLeft: 5,
+    // marginRight: 5
+
+  }
+
 })
