@@ -6,7 +6,7 @@ import CameraComponent from './CameraComponent';
 import { Camera } from 'expo-camera';
 
 const ChatInputComponent = ({
-  showEmoGifBoard, isBoardVisible, messageText, setMessageText, sendMessage, recordAudio, showMediaPicker, recording
+  showEmoGifBoard, isBoardVisible, messageText ,recordingTime, setMessageText, stopRecording,sendMessage, recordAudio, showMediaPicker, recording, pauseRecording, deleteRecording, isPaused
 }) => {
 
   const inputRef = useRef();
@@ -14,7 +14,7 @@ const ChatInputComponent = ({
   const [hours, setHours] = useState();
   const [minutes, setMinutes] = useState(0);
   const { seconds, setSeconds } = useState(5);
-  const [isPaused, setIsPaused] = useState(true);
+  // const [isPaused, setIsPaused] = useState(false);
 
   const checkCameraPermission = async () => {
     try {
@@ -81,11 +81,11 @@ const ChatInputComponent = ({
             <View style={styles.recordingCont}>
               {
                 isPaused ? (
-                    <Pressable>
+                    <Pressable onPress={() => recordAudio()}>
                       <MaterialIcons name="fiber-manual-record" size={32 } color="rgb(200, 80, 80)" style={[styles.pauseIcon, {top: -3 }]} />
                     </Pressable>
                   ) : (
-                    <Pressable>
+                    <Pressable onPress={()=> pauseRecording()}>
                       <Ionicons name='pause' size={24} color={'black'} style={styles.pauseIcon} />
                     </Pressable>
                 )
@@ -97,8 +97,12 @@ const ChatInputComponent = ({
                 <Text style={styles.text}>{minutes + ':'}</Text>
                 <Text style={styles.text}>{seconds}</Text>
               </View>
-              <Ionicons name="stop" size={24} color="rgb(200, 80, 80)"   style={styles.stopIcon}/>
-              <Pressable>
+                <Pressable onPress={()=> stopRecording()}>
+                  <Ionicons name="stop" size={24} color="rgb(200, 80, 80)" style={styles.stopIcon} />
+                </Pressable>
+            
+              
+              <Pressable onPress={()=> deleteRecording()}>
                 <MaterialIcons name="delete" size={24} color="rgb(200, 80, 80)" style={styles.deleteIcon} />
               </Pressable>
 
